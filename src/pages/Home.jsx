@@ -1,12 +1,18 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
 import { ShieldCheck, Cpu, BookOpen, Terminal, ArrowRight, Sparkles, CheckCircle2, Zap, Activity } from 'lucide-react';
 import ProjectModal from '../components/ProjectModal';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState('netimmune');
   const [selectedProject, setSelectedProject] = useState(null);
+
+  const scrollToSection = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const metrics = [
     { label: 'Threat Inference Speed', value: 'sub-200ms', desc: 'Zero-shot AI Classification via Groq API' },
@@ -17,25 +23,25 @@ export default function Home() {
 
   const terminalLogs = {
     netimmune: [
-      { text: '[INIT] Net Immune Autonomous EDR Engine v2.0...', color: 'text-blue-500 dark:text-cyan-400' },
+      { text: '[INIT] Net Immune Autonomous EDR Engine v2.0...', color: 'text-blue-600 dark:text-cyan-400 font-bold' },
       { text: '[AGENT 1..6] Bootstrapping Windows endpoint monitors & thread hooks...', color: 'opacity-80' },
       { text: '[GROQ API] Groq Llama-3 70B zero-shot classifier connected. Latency: 184ms.', color: 'text-emerald-600 dark:text-emerald-400' },
-      { text: '[ALERT] Suspicious process hierarchy detected in winlogon memory space.', color: 'text-amber-500' },
+      { text: '[ALERT] Suspicious process hierarchy detected in winlogon memory space.', color: 'text-amber-500 font-semibold' },
       { text: '[ACTION] Multi-agent consensus reached: Threat neutralized automatically.', color: 'text-emerald-600 dark:text-emerald-400 font-bold' },
     ],
     agv: [
-      { text: '[AGV] BlueFactory Copilot pathfinding simulator initialized.', color: 'text-purple-500 dark:text-purple-400' },
+      { text: '[AGV] BlueFactory Copilot pathfinding simulator initialized.', color: 'text-purple-600 dark:text-purple-400 font-bold' },
       { text: '[GRAPH] Loading warehouse grid map (200x200 node mesh)...', color: 'opacity-80' },
-      { text: '[A* ALGORITHM] Optimal path computed: 42 steps, 0.04s execution.', color: 'text-blue-500 dark:text-cyan-400' },
+      { text: '[A* ALGORITHM] Optimal path computed: 42 steps, 0.04s execution.', color: 'text-blue-600 dark:text-cyan-400' },
       { text: '[PHYSICS] Battery drain model: 98.4% nominal. Heat dissipation stable.', color: 'text-emerald-600 dark:text-emerald-400' },
       { text: '[REST API] FastAPI endpoint synchronized with React.js frontend interface.', color: 'opacity-90' },
     ],
     sysinfo: [
-      { text: 'USER: Kamalesh S', color: 'text-liquid-accentBlue dark:text-liquid-accentCyan font-bold' },
+      { text: 'USER: Kamalesh S', color: 'text-blue-600 dark:text-cyan-400 font-bold' },
       { text: 'DEGREE: B.E. Computer Science & Engineering (7.5 CGPA)', color: 'opacity-90' },
       { text: 'COLLEGE: Kingston Engineering College, Katpadi (2022 - 2026)', color: 'opacity-90' },
       { text: 'CAREER STATUS: Excited to start career at Texawave', color: 'text-amber-500 font-semibold' },
-      { text: 'PRIMARY STACK: Python, FastAPI, React.js, Llama-3, Node.js, C, Firebase', color: 'text-purple-500 dark:text-purple-300' },
+      { text: 'PRIMARY STACK: Python, FastAPI, React.js, Llama-3, Node.js, C, Firebase', color: 'text-purple-600 dark:text-purple-300' },
     ]
   };
 
@@ -70,10 +76,10 @@ export default function Home() {
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full liquid-glass border border-white/80 dark:border-white/15 text-xs font-semibold shadow-md"
+          className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full liquid-glass text-xs font-semibold shadow-md cursor-default"
         >
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-liquid-textLightPrimary dark:text-liquid-textDarkPrimary">
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+          <span>
             AI & Systems Software Engineer · Excited for Texawave Journey
           </span>
         </motion.div>
@@ -84,7 +90,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-4xl sm:text-7xl font-extrabold tracking-tight leading-[1.1] text-liquid-textLightPrimary dark:text-liquid-textDarkPrimary"
+            className="text-4xl sm:text-7xl font-extrabold tracking-tight leading-[1.1]"
           >
             Building software that <br className="hidden sm:inline" />
             <span className="liquid-text-gradient">thinks, protects, & moves.</span>
@@ -94,9 +100,9 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-lg sm:text-2xl font-normal text-liquid-textLightSecondary dark:text-liquid-textDarkSecondary leading-relaxed max-w-3xl"
+            className="text-lg sm:text-2xl font-normal opacity-85 leading-relaxed max-w-3xl"
           >
-            I'm <strong className="text-liquid-textLightPrimary dark:text-liquid-textDarkPrimary">Kamalesh S</strong> — a Computer Science graduate specializing in native multi-agent AI systems, pathfinding robotics, and high-speed API engineering.
+            I'm <strong className="font-bold">Kamalesh S</strong> — a Computer Science graduate specializing in native multi-agent AI systems, pathfinding robotics, and high-speed API engineering.
           </motion.p>
         </div>
 
@@ -107,46 +113,56 @@ export default function Home() {
           transition={{ delay: 0.3 }}
           className="flex flex-wrap items-center gap-4 pt-2"
         >
-          <Link
-            to="/projects"
-            className="px-6 py-3.5 rounded-2xl bg-liquid-accentBlue text-white font-medium text-base flex items-center gap-2 hover:bg-liquid-accentBlue/90 transition-all shadow-lg shadow-liquid-accentBlue/25 hover:scale-105 active:scale-95"
+          <motion.button
+            whileHover={{ scale: 1.05, y: -4 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: 'spring', stiffness: 350, damping: 20 }}
+            onClick={() => scrollToSection('projects')}
+            className="px-7 py-3.5 rounded-full bg-blue-600 dark:bg-cyan-500 text-white font-medium text-base flex items-center gap-2 hover:opacity-90 shadow-lg shadow-blue-500/25"
           >
             Explore My Work <ArrowRight className="w-4 h-4" />
-          </Link>
-          <Link
-            to="/about"
-            className="px-6 py-3.5 rounded-2xl liquid-glass border border-white/80 dark:border-white/20 text-liquid-textLightPrimary dark:text-liquid-textDarkPrimary font-medium text-base hover:bg-white/70 dark:hover:bg-white/15 transition-all hover:scale-105 active:scale-95"
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.05, y: -4 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: 'spring', stiffness: 350, damping: 20 }}
+            onClick={() => scrollToSection('about')}
+            className="px-7 py-3.5 rounded-full liquid-glass font-medium text-base"
           >
             View Journey & Skills
-          </Link>
-          <button
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.05, y: -4 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: 'spring', stiffness: 350, damping: 20 }}
             onClick={() => setSelectedProject(featuredNetImmune)}
-            className="px-6 py-3.5 rounded-2xl liquid-glass border border-purple-500/30 text-purple-600 dark:text-purple-300 font-medium text-base hover:bg-purple-500/10 transition-all flex items-center gap-2"
+            className="px-7 py-3.5 rounded-full liquid-glass text-purple-600 dark:text-purple-300 font-medium text-base hover:bg-purple-500/10 flex items-center gap-2"
           >
             <BookOpen className="w-4 h-4 text-purple-500" /> Read Research Paper
-          </button>
+          </motion.button>
         </motion.div>
       </section>
 
-      {/* Key Metrics Grid */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* Key Metrics Grid - iOS App Zoom Spring Transition */}
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {metrics.map((m, idx) => (
           <motion.div
             key={m.label}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 * idx + 0.3 }}
-            className="liquid-card hover:scale-[1.02] transition-transform duration-300 flex flex-col justify-between"
+            whileHover={{ scale: 1.04, y: -6 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.05 * idx }}
+            className="liquid-card rounded-[28px] cursor-pointer flex flex-col justify-between p-6 sm:p-7 shadow-xl"
           >
-            <div className="space-y-1">
-              <span className="text-3xl sm:text-4xl font-extrabold tracking-tight text-liquid-accentBlue dark:text-liquid-accentCyan">
+            <div className="space-y-1.5">
+              <span className="text-3xl sm:text-4xl font-extrabold tracking-tight text-blue-600 dark:text-cyan-400">
                 {m.value}
               </span>
-              <h3 className="text-sm font-semibold text-liquid-textLightPrimary dark:text-liquid-textDarkPrimary">
+              <h3 className="text-sm font-semibold">
                 {m.label}
               </h3>
             </div>
-            <p className="text-xs text-liquid-textLightSecondary dark:text-liquid-textDarkSecondary mt-4 pt-3 border-t border-white/40 dark:border-white/10">
+            <p className="text-xs opacity-75 mt-4 pt-3 border-t border-white/40 dark:border-white/10">
               {m.desc}
             </p>
           </motion.div>
@@ -157,43 +173,43 @@ export default function Home() {
       <section className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight text-liquid-textLightPrimary dark:text-liquid-textDarkPrimary flex items-center gap-2">
-              <Terminal className="w-5 h-5 text-liquid-accentBlue dark:text-liquid-accentCyan" />
+            <h2 className="text-2xl font-bold tracking-tight flex items-center gap-2">
+              <Terminal className="w-5 h-5 text-blue-600 dark:text-cyan-400" />
               Live System Telemetry
             </h2>
-            <p className="text-sm text-liquid-textLightSecondary dark:text-liquid-textDarkSecondary">
+            <p className="text-sm opacity-75">
               Simulated real-time execution logs from my core architected systems.
             </p>
           </div>
 
           {/* Terminal Tabs */}
-          <div className="flex items-center gap-2 p-1 rounded-2xl liquid-glass border border-white/60 dark:border-white/15 self-start sm:self-auto">
+          <div className="flex items-center gap-2 p-1.5 rounded-full liquid-glass self-start sm:self-auto">
             <button
               onClick={() => setActiveTab('netimmune')}
-              className={`px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition-colors ${
+              className={`px-4 py-1.5 rounded-full text-xs font-mono font-medium transition-colors ${
                 activeTab === 'netimmune'
-                  ? 'bg-liquid-accentBlue text-white shadow-md'
-                  : 'text-liquid-textLightSecondary dark:text-liquid-textDarkSecondary hover:text-liquid-textLightPrimary'
+                  ? 'bg-blue-600 text-white shadow-md'
+                  : 'opacity-70 hover:opacity-100'
               }`}
             >
               net_immune.py
             </button>
             <button
               onClick={() => setActiveTab('agv')}
-              className={`px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition-colors ${
+              className={`px-4 py-1.5 rounded-full text-xs font-mono font-medium transition-colors ${
                 activeTab === 'agv'
-                  ? 'bg-liquid-accentBlue text-white shadow-md'
-                  : 'text-liquid-textLightSecondary dark:text-liquid-textDarkSecondary hover:text-liquid-textLightPrimary'
+                  ? 'bg-blue-600 text-white shadow-md'
+                  : 'opacity-70 hover:opacity-100'
               }`}
             >
               agv_copilot.py
             </button>
             <button
               onClick={() => setActiveTab('sysinfo')}
-              className={`px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition-colors ${
+              className={`px-4 py-1.5 rounded-full text-xs font-mono font-medium transition-colors ${
                 activeTab === 'sysinfo'
-                  ? 'bg-liquid-accentBlue text-white shadow-md'
-                  : 'text-liquid-textLightSecondary dark:text-liquid-textDarkSecondary hover:text-liquid-textLightPrimary'
+                  ? 'bg-blue-600 text-white shadow-md'
+                  : 'opacity-70 hover:opacity-100'
               }`}
             >
               sys_info.sh
@@ -202,14 +218,18 @@ export default function Home() {
         </div>
 
         {/* Terminal Window Box */}
-        <div className="liquid-glass rounded-3xl p-6 border border-white/80 dark:border-white/15 shadow-2xl font-mono text-xs sm:text-sm space-y-3 overflow-hidden">
+        <motion.div
+          whileHover={{ scale: 1.01 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+          className="liquid-glass rounded-[28px] p-6 sm:p-8 shadow-2xl font-mono text-xs sm:text-sm space-y-3 overflow-hidden"
+        >
           <div className="flex items-center justify-between pb-3 border-b border-white/40 dark:border-white/10 opacity-70">
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 rounded-full bg-rose-500/80" />
               <span className="w-3 h-3 rounded-full bg-amber-500/80" />
               <span className="w-3 h-3 rounded-full bg-emerald-500/80" />
             </div>
-            <span className="text-xs text-liquid-textLightSecondary dark:text-liquid-textDarkSecondary">
+            <span className="text-xs opacity-75">
               bash - 80x24
             </span>
           </div>
@@ -227,33 +247,39 @@ export default function Home() {
               </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* Featured Research Spotlight */}
-      <section className="liquid-card border-l-4 border-l-liquid-accentBlue dark:border-l-liquid-accentCyan space-y-6">
+      <motion.section
+        whileHover={{ scale: 1.02, y: -4 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+        className="liquid-card rounded-[28px] border-l-4 border-l-blue-600 dark:border-l-cyan-400 space-y-6 shadow-2xl"
+      >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-300 text-xs font-mono font-semibold">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-300 text-xs font-mono font-semibold">
               <BookOpen className="w-3.5 h-3.5" /> Peer-Reviewed Research Paper
             </div>
-            <h3 className="text-xl sm:text-3xl font-bold tracking-tight text-liquid-textLightPrimary dark:text-liquid-textDarkPrimary">
+            <h3 className="text-xl sm:text-3xl font-bold tracking-tight">
               "Net Immune: An Autonomous Multi-Agent AI System for Real-Time Endpoint Threat Neutralization"
             </h3>
-            <p className="text-sm sm:text-base text-liquid-textLightSecondary dark:text-liquid-textDarkSecondary leading-relaxed">
+            <p className="text-sm sm:text-base opacity-80 leading-relaxed">
               Published in the International Journal of Research in Advanced Science and Engineering Technology (IJSART), Vol. 12, Issue 5, 2026.
               Authored by <strong>Kamalesh S</strong>, Junaid Ahmed J, John Peter V, Lingesh M.
             </p>
           </div>
 
-          <button
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             onClick={() => setSelectedProject(featuredNetImmune)}
-            className="shrink-0 px-6 py-3 rounded-2xl bg-liquid-accentBlue text-white font-medium text-sm hover:bg-liquid-accentBlue/90 transition-colors shadow-lg"
+            className="shrink-0 px-6 py-3 rounded-full bg-blue-600 text-white font-medium text-sm hover:opacity-90 shadow-lg"
           >
             Inspect Paper & Architecture
-          </button>
+          </motion.button>
         </div>
-      </section>
+      </motion.section>
 
       {/* Project Detail Modal */}
       <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />

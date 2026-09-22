@@ -42,7 +42,7 @@ export default function Contact() {
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-liquid-accentBlue/10 dark:bg-liquid-accentCyan/10 text-liquid-accentBlue dark:text-liquid-accentCyan text-xs font-mono font-semibold"
+          className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-500/10 text-blue-600 dark:text-cyan-400 text-xs font-mono font-semibold"
         >
           / GET IN TOUCH
         </motion.div>
@@ -50,7 +50,7 @@ export default function Contact() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="text-3xl sm:text-5xl font-extrabold tracking-tight text-liquid-textLightPrimary dark:text-liquid-textDarkPrimary"
+          className="text-3xl sm:text-5xl font-extrabold tracking-tight"
         >
           Let's connect & build together.
         </motion.h1>
@@ -58,27 +58,27 @@ export default function Contact() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="text-base sm:text-lg text-liquid-textLightSecondary dark:text-liquid-textDarkSecondary max-w-2xl"
+          className="text-base sm:text-lg opacity-80 max-w-2xl"
         >
           Whether you have a question about my research on Net Immune, want to discuss AGV pathfinding, or have an exciting opportunity, my inbox is open.
         </motion.p>
       </section>
 
-      {/* Main Grid */}
+      {/* Main Grid - Ultra-Soft Rounded Contours */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Contact Form */}
+        {/* Contact Form Container */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="liquid-card space-y-6"
+          className="liquid-card rounded-[28px] space-y-6 p-6 sm:p-8"
         >
-          <h2 className="text-xl font-bold text-liquid-textLightPrimary dark:text-liquid-textDarkPrimary">
+          <h2 className="text-xl font-bold">
             Transmit a Direct Message
           </h2>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-1.5">
-              <label className="text-xs font-mono font-semibold text-liquid-textLightSecondary dark:text-liquid-textDarkSecondary uppercase tracking-wider">
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="space-y-2">
+              <label className="text-xs font-mono font-semibold opacity-75 uppercase tracking-wider pl-2">
                 Your Name
               </label>
               <input
@@ -87,12 +87,12 @@ export default function Contact() {
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 placeholder="e.g. Alex Johnson"
-                className="w-full px-4 py-3 rounded-2xl bg-white/50 dark:bg-white/5 border border-white/70 dark:border-white/10 text-liquid-textLightPrimary dark:text-liquid-textDarkPrimary outline-none focus:border-liquid-accentBlue dark:focus:border-liquid-accentCyan transition-colors text-sm"
+                className="w-full px-5 py-3.5 rounded-full bg-white/50 dark:bg-white/5 border border-white/80 dark:border-white/10 outline-none focus:border-blue-500 dark:focus:border-cyan-400 transition-all text-sm shadow-inner"
               />
             </div>
 
-            <div className="space-y-1.5">
-              <label className="text-xs font-mono font-semibold text-liquid-textLightSecondary dark:text-liquid-textDarkSecondary uppercase tracking-wider">
+            <div className="space-y-2">
+              <label className="text-xs font-mono font-semibold opacity-75 uppercase tracking-wider pl-2">
                 Email Address
               </label>
               <input
@@ -101,28 +101,28 @@ export default function Contact() {
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 placeholder="e.g. alex@company.com"
-                className="w-full px-4 py-3 rounded-2xl bg-white/50 dark:bg-white/5 border border-white/70 dark:border-white/10 text-liquid-textLightPrimary dark:text-liquid-textDarkPrimary outline-none focus:border-liquid-accentBlue dark:focus:border-liquid-accentCyan transition-colors text-sm"
+                className="w-full px-5 py-3.5 rounded-full bg-white/50 dark:bg-white/5 border border-white/80 dark:border-white/10 outline-none focus:border-blue-500 dark:focus:border-cyan-400 transition-all text-sm shadow-inner"
               />
             </div>
 
-            <div className="space-y-1.5">
-              <label className="text-xs font-mono font-semibold text-liquid-textLightSecondary dark:text-liquid-textDarkSecondary uppercase tracking-wider">
+            <div className="space-y-2">
+              <label className="text-xs font-mono font-semibold opacity-75 uppercase tracking-wider pl-2">
                 Message Content
               </label>
               <textarea
                 required
-                rows="5"
+                rows="4"
                 value={formData.message}
                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                 placeholder="Write your query or message here..."
-                className="w-full px-4 py-3 rounded-2xl bg-white/50 dark:bg-white/5 border border-white/70 dark:border-white/10 text-liquid-textLightPrimary dark:text-liquid-textDarkPrimary outline-none focus:border-liquid-accentBlue dark:focus:border-liquid-accentCyan transition-colors text-sm resize-none"
+                className="w-full px-5 py-4 rounded-[24px] bg-white/50 dark:bg-white/5 border border-white/80 dark:border-white/10 outline-none focus:border-blue-500 dark:focus:border-cyan-400 transition-all text-sm resize-none shadow-inner"
               />
             </div>
 
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-3.5 rounded-2xl bg-liquid-accentBlue text-white font-medium text-sm flex items-center justify-center gap-2 hover:bg-liquid-accentBlue/90 transition-all shadow-lg shadow-liquid-accentBlue/25 disabled:opacity-50"
+              className="w-full py-4 rounded-full bg-blue-600 dark:bg-cyan-500 text-white font-medium text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-lg shadow-blue-500/25 hover:scale-[1.01] active:scale-95 disabled:opacity-50"
             >
               {isSubmitting ? (
                 <>Transmitting Message...</>
@@ -139,43 +139,43 @@ export default function Contact() {
           </form>
         </motion.div>
 
-        {/* Direct Transmission Channels */}
+        {/* Direct Transmission Channels - Soft Rounded Pills */}
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           className="space-y-6"
         >
           {/* Status Box */}
-          <div className="liquid-card border-l-4 border-l-emerald-500 space-y-2">
+          <div className="liquid-card rounded-[28px] border-l-4 border-l-emerald-500 space-y-2 p-6 sm:p-8">
             <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
               Career Status
             </span>
-            <h3 className="text-lg font-bold text-liquid-textLightPrimary dark:text-liquid-textDarkPrimary">
+            <h3 className="text-lg font-bold">
               Excited to start career at Texawave
             </h3>
-            <p className="text-xs text-liquid-textLightSecondary dark:text-liquid-textDarkSecondary">
+            <p className="text-xs opacity-75">
               Open to collaborative research, open-source AI projects, and system software discussions.
             </p>
           </div>
 
           {/* Contact Details List */}
-          <div className="liquid-card space-y-4">
-            <h3 className="text-lg font-bold text-liquid-textLightPrimary dark:text-liquid-textDarkPrimary">
+          <div className="liquid-card rounded-[28px] space-y-4 p-6 sm:p-8">
+            <h3 className="text-lg font-bold">
               Direct Communication Channels
             </h3>
 
             <div className="space-y-3 font-mono text-sm">
               {/* Email */}
-              <div className="p-3.5 rounded-2xl bg-white/40 dark:bg-white/5 border border-white/60 dark:border-white/10 flex items-center justify-between gap-3">
-                <div className="flex items-center gap-3 overflow-hidden">
-                  <Mail className="w-4 h-4 text-liquid-accentBlue dark:text-liquid-accentCyan shrink-0" />
-                  <a href={`mailto:${contactInfo.email}`} className="truncate hover:underline text-liquid-textLightPrimary dark:text-liquid-textDarkPrimary">
+              <div className="p-4 rounded-full bg-white/40 dark:bg-white/5 border border-white/70 dark:border-white/10 flex items-center justify-between gap-3 shadow-sm">
+                <div className="flex items-center gap-3 overflow-hidden pl-2">
+                  <Mail className="w-4 h-4 text-blue-600 dark:text-cyan-400 shrink-0" />
+                  <a href={`mailto:${contactInfo.email}`} className="truncate hover:underline">
                     {contactInfo.email}
                   </a>
                 </div>
                 <button
                   onClick={() => handleCopy(contactInfo.email, 'email')}
-                  className="p-2 rounded-xl hover:bg-white/80 dark:hover:bg-white/15 text-liquid-textLightSecondary shrink-0"
+                  className="p-2 rounded-full hover:bg-white/80 dark:hover:bg-white/15 opacity-75 shrink-0"
                   title="Copy Email"
                 >
                   {copiedItem === 'email' ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
@@ -183,16 +183,16 @@ export default function Contact() {
               </div>
 
               {/* Phone */}
-              <div className="p-3.5 rounded-2xl bg-white/40 dark:bg-white/5 border border-white/60 dark:border-white/10 flex items-center justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <Phone className="w-4 h-4 text-liquid-accentBlue dark:text-liquid-accentCyan shrink-0" />
-                  <a href={`tel:${contactInfo.phone}`} className="hover:underline text-liquid-textLightPrimary dark:text-liquid-textDarkPrimary">
+              <div className="p-4 rounded-full bg-white/40 dark:bg-white/5 border border-white/70 dark:border-white/10 flex items-center justify-between gap-3 shadow-sm">
+                <div className="flex items-center gap-3 pl-2">
+                  <Phone className="w-4 h-4 text-blue-600 dark:text-cyan-400 shrink-0" />
+                  <a href={`tel:${contactInfo.phone}`} className="hover:underline">
                     {contactInfo.phone}
                   </a>
                 </div>
                 <button
                   onClick={() => handleCopy(contactInfo.phone, 'phone')}
-                  className="p-2 rounded-xl hover:bg-white/80 dark:hover:bg-white/15 text-liquid-textLightSecondary shrink-0"
+                  className="p-2 rounded-full hover:bg-white/80 dark:hover:bg-white/15 opacity-75 shrink-0"
                   title="Copy Phone"
                 >
                   {copiedItem === 'phone' ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
@@ -200,20 +200,20 @@ export default function Contact() {
               </div>
 
               {/* LinkedIn */}
-              <div className="p-3.5 rounded-2xl bg-white/40 dark:bg-white/5 border border-white/60 dark:border-white/10 flex items-center justify-between gap-3">
-                <div className="flex items-center gap-3 overflow-hidden">
-                  <LinkedinIcon className="w-4 h-4 text-liquid-accentBlue dark:text-liquid-accentCyan shrink-0" />
-                  <a href={contactInfo.linkedin} target="_blank" rel="noreferrer" className="truncate hover:underline text-liquid-textLightPrimary dark:text-liquid-textDarkPrimary">
+              <div className="p-4 rounded-full bg-white/40 dark:bg-white/5 border border-white/70 dark:border-white/10 flex items-center justify-between gap-3 shadow-sm">
+                <div className="flex items-center gap-3 overflow-hidden pl-2">
+                  <LinkedinIcon className="w-4 h-4 text-blue-600 dark:text-cyan-400 shrink-0" />
+                  <a href={contactInfo.linkedin} target="_blank" rel="noreferrer" className="truncate hover:underline">
                     linkedin.com/in/Kamalesh.S
                   </a>
                 </div>
               </div>
 
               {/* GitHub */}
-              <div className="p-3.5 rounded-2xl bg-white/40 dark:bg-white/5 border border-white/60 dark:border-white/10 flex items-center justify-between gap-3">
-                <div className="flex items-center gap-3 overflow-hidden">
-                  <GithubIcon className="w-4 h-4 text-liquid-accentBlue dark:text-liquid-accentCyan shrink-0" />
-                  <a href={contactInfo.github} target="_blank" rel="noreferrer" className="truncate hover:underline text-liquid-textLightPrimary dark:text-liquid-textDarkPrimary">
+              <div className="p-4 rounded-full bg-white/40 dark:bg-white/5 border border-white/70 dark:border-white/10 flex items-center justify-between gap-3 shadow-sm">
+                <div className="flex items-center gap-3 overflow-hidden pl-2">
+                  <GithubIcon className="w-4 h-4 text-blue-600 dark:text-cyan-400 shrink-0" />
+                  <a href={contactInfo.github} target="_blank" rel="noreferrer" className="truncate hover:underline">
                     github.com/kamalesh-S2K5-RR
                   </a>
                 </div>

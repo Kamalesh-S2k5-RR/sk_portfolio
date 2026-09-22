@@ -146,7 +146,7 @@ export default function Projects() {
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-liquid-accentBlue/10 dark:bg-liquid-accentCyan/10 text-liquid-accentBlue dark:text-liquid-accentCyan text-xs font-mono font-semibold"
+          className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-500/10 text-blue-600 dark:text-cyan-400 text-xs font-mono font-semibold"
         >
           / ARCHITECTED SYSTEMS
         </motion.div>
@@ -154,7 +154,7 @@ export default function Projects() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="text-3xl sm:text-5xl font-extrabold tracking-tight text-liquid-textLightPrimary dark:text-liquid-textDarkPrimary"
+          className="text-3xl sm:text-5xl font-extrabold tracking-tight"
         >
           Featured Engineering & Research Projects
         </motion.h1>
@@ -162,7 +162,7 @@ export default function Projects() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="text-base sm:text-lg text-liquid-textLightSecondary dark:text-liquid-textDarkSecondary max-w-2xl"
+          className="text-base sm:text-lg opacity-80 max-w-2xl"
         >
           Explore my portfolio of multi-agent AI tools, pathfinding simulations, full-stack platforms, and embedded robotics.
         </motion.p>
@@ -171,50 +171,53 @@ export default function Projects() {
       {/* Category Filter Capsule Pills */}
       <section className="flex flex-wrap items-center gap-2">
         {categories.map((cat) => (
-          <button
+          <motion.button
             key={cat}
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            transition={{ duration: 0.1 }}
             onClick={() => setActiveCategory(cat)}
-            className={`px-4 py-2 rounded-2xl text-xs sm:text-sm font-medium transition-all duration-200 border ${
+            className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-medium transition-colors ${
               activeCategory === cat
-                ? 'bg-liquid-accentBlue text-white border-liquid-accentBlue shadow-lg shadow-liquid-accentBlue/25'
-                : 'liquid-glass border-white/70 dark:border-white/15 text-liquid-textLightSecondary dark:text-liquid-textDarkSecondary hover:text-liquid-textLightPrimary hover:border-white/90'
+                ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25'
+                : 'liquid-glass opacity-80 hover:opacity-100'
             }`}
           >
             {cat}
-          </button>
+          </motion.button>
         ))}
       </section>
 
-      {/* Projects Grid */}
+      {/* Projects Grid - 100% Synchronized Instant Hover Speed Across All 6 Cards */}
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredProjects.map((project, index) => {
-          const IconComponent = project.icon || Briefcase;
+        {filteredProjects.map((project) => {
           return (
             <motion.div
               key={project.id}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.08 * index }}
-              className="liquid-card group hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between cursor-pointer"
+              whileHover={{ scale: 1.04, y: -6 }}
+              transition={{ type: 'spring', stiffness: 350, damping: 22 }}
+              className="liquid-card rounded-[28px] group flex flex-col justify-between cursor-pointer shadow-xl"
               onClick={() => setSelectedProject(project)}
             >
               <div>
                 {/* Header info */}
                 <div className="flex items-center justify-between gap-2 mb-4">
-                  <span className="px-3 py-1 rounded-full text-[10px] font-mono font-semibold bg-liquid-accentBlue/10 dark:bg-liquid-accentCyan/10 text-liquid-accentBlue dark:text-liquid-accentCyan">
+                  <span className="px-3 py-1 rounded-full text-[10px] font-mono font-semibold bg-blue-500/10 text-blue-600 dark:text-cyan-400">
                     {project.category}
                   </span>
-                  <span className="text-xs font-mono opacity-60 text-liquid-textLightSecondary dark:text-liquid-textDarkSecondary">
+                  <span className="text-xs font-mono opacity-60">
                     {project.year}
                   </span>
                 </div>
 
-                <h3 className="text-xl font-bold tracking-tight text-liquid-textLightPrimary dark:text-liquid-textDarkPrimary group-hover:text-liquid-accentBlue dark:group-hover:text-liquid-accentCyan transition-colors mb-3 flex items-center justify-between">
+                <h3 className="text-xl font-bold tracking-tight mb-3 flex items-center justify-between">
                   <span>{project.title}</span>
-                  <ArrowUpRight className="w-5 h-5 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
+                  <ArrowUpRight className="w-5 h-5 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0 text-blue-600 dark:text-cyan-400" />
                 </h3>
 
-                <p className="text-sm text-liquid-textLightSecondary dark:text-liquid-textDarkSecondary leading-relaxed mb-6">
+                <p className="text-sm opacity-80 leading-relaxed mb-6">
                   {project.desc}
                 </p>
               </div>
@@ -225,19 +228,19 @@ export default function Projects() {
                   {project.tags.slice(0, 3).map((tag) => (
                     <span
                       key={tag}
-                      className="px-2.5 py-0.5 rounded-lg text-[11px] font-mono bg-white/50 dark:bg-white/10 text-liquid-textLightPrimary dark:text-liquid-textDarkPrimary border border-white/60 dark:border-white/10"
+                      className="px-3 py-1 rounded-full text-[11px] font-mono bg-white/50 dark:bg-white/10 border border-white/60 dark:border-white/10"
                     >
                       {tag}
                     </span>
                   ))}
                   {project.tags.length > 3 && (
-                    <span className="px-2 py-0.5 rounded-lg text-[10px] font-mono opacity-60 text-liquid-textLightSecondary">
+                    <span className="px-2.5 py-1 rounded-full text-[10px] font-mono opacity-60">
                       +{project.tags.length - 3}
                     </span>
                   )}
                 </div>
 
-                <div className="pt-3 border-t border-white/40 dark:border-white/10 flex items-center justify-between text-xs font-semibold text-liquid-accentBlue dark:text-liquid-accentCyan">
+                <div className="pt-3 border-t border-white/40 dark:border-white/10 flex items-center justify-between text-xs font-semibold text-blue-600 dark:text-cyan-400">
                   <span>Inspect System Details</span>
                   <span className="group-hover:translate-x-1 transition-transform">→</span>
                 </div>

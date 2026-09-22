@@ -1,101 +1,195 @@
-import { useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sun, Moon, Command, Menu, X, Sparkles } from 'lucide-react';
+import { Sun, Moon, Droplets, Command, Menu, X } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import CommandPalette from './CommandPalette';
 
 export default function Navbar() {
-  const { theme, toggleTheme } = useTheme();
-  const location = useLocation();
+  const { theme, cycleTheme } = useTheme();
+  const [activeSection, setActiveSection] = useState('home');
   const [isCmdOpen, setIsCmdOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems = [
-    { name: 'Home', path: '/' },
-    { name: 'About', path: '/about' },
-    { name: 'Projects', path: '/projects' },
-    { name: 'Contact', path: '/contact' },
+    { name: 'Home', id: 'home' },
+    { name: 'About', id: 'about' },
+    { name: 'Projects', id: 'projects' },
+    { name: 'Contact', id: 'contact' },
   ];
+
+  const barRef = useRef(null);
+  const pillRef = useRef(null);
+  const linkRefs = useRef({});
+  const isProgrammaticScrollRef = useRef(false);
+  const scrollTimeoutRef = useRef(null);
+
+  // Move pill DOM element to target link node (User's Model JS Logic)
+  const movePillTo = (el) => {
+    if (!barRef.current || !pillRef.current || !el) return;
+    const b = barRef.current.getBoundingClientRect();
+    const r = el.getBoundingClientRect();
+    pillRef.current.style.left = `${r.left - b.left}px`;
+    pillRef.current.style.width = `${r.width}px`;
+  };
+
+  // Sync pill to active section on mount or section change
+  useEffect(() => {
+    const activeEl = linkRefs.current[activeSection];
+    if (activeEl) {
+      requestAnimationFrame(() => movePillTo(activeEl));
+    }
+  }, [activeSection]);
+
+  // Scroll spy to detect active section (Locked during programmatic click scroll)
+  useEffect(() => {
+    const handleScroll = () => {
+      if (isProgrammaticScrollRef.current) return; // Prevent intermediate stepping during link click!
+
+      const sections = navItems.map((item) => document.getElementById(item.id));
+      const scrollPosition = window.scrollY + 220;
+
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const section = sections[i];
+        if (section && section.offsetTop <= scrollPosition) {
+          if (activeSection !== navItems[i].id) {
+            setActiveSection(navItems[i].id);
+          }
+          break;
+        }
+      }
+    };
+
+    const handleResize = () => {
+      const activeEl = linkRefs.current[activeSection];
+      if (activeEl) movePillTo(activeEl);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [activeSection]);
+
+  const scrollToSection = (id) => {
+    // Lock scroll spy to prevent intermediate tab stepping
+    isProgrammaticScrollRef.current = true;
+    setActiveSection(id);
+    setMobileMenuOpen(false);
+
+    // Direct snap to target nav link
+    const targetEl = linkRefs.current[id];
+    if (targetEl) {
+      movePillTo(targetEl);
+    }
+
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Unlock scroll spy after smooth scroll finishes
+    if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+    scrollTimeoutRef.current = setTimeout(() => {
+      isProgrammaticScrollRef.current = false;
+    }, 850);
+  };
+
+  const getThemeIcon = () => {
+    if (theme === 'light') return <Sun className="w-4 h-4 text-amber-500" />;
+    if (theme === 'dark') return <Moon className="w-4 h-4 text-cyan-400" />;
+    return <Droplets className="w-4 h-4 text-blue-600 dark:text-cyan-400" />;
+  };
+
+  const getThemeLabel = () => {
+    if (theme === 'light') return 'Light';
+    if (theme === 'dark') return 'Dark';
+    return 'Liquid Crystal';
+  };
 
   return (
     <>
       <header className="sticky top-0 z-40 w-full px-4 sm:px-8 py-4 pointer-events-none">
         <div className="max-w-6xl mx-auto flex items-center justify-between pointer-events-auto">
-          {/* Brand Logo with Liquid Refraction Pill */}
-          <NavLink
-            to="/"
-            className="group relative flex items-center gap-2 px-4 py-2 rounded-2xl liquid-glass border border-white/70 dark:border-white/15 shadow-lg transition-transform duration-300 active:scale-95"
+          {/* Brand Logo */}
+          <button
+            onClick={() => scrollToSection('home')}
+            className="group relative flex items-center gap-2.5 px-4 py-2 rounded-full liquid-glass shadow-lg transition-transform duration-150 active:scale-95 text-left border border-white/80 dark:border-white/15"
           >
-            <div className="w-2.5 h-2.5 rounded-full bg-liquid-accentBlue dark:bg-liquid-accentCyan animate-pulse" />
-            <span className="font-bold tracking-tight text-lg text-liquid-textLightPrimary dark:text-liquid-textDarkPrimary">
-              Kamalesh<span className="text-liquid-accentBlue dark:text-liquid-accentCyan">.S</span>
+            <div className="w-2.5 h-2.5 rounded-full bg-blue-600 dark:bg-cyan-400 animate-pulse" />
+            <span className="font-bold tracking-tight text-lg text-slate-900 dark:text-white">
+              Kamalesh<span className="text-blue-600 dark:text-cyan-400">.S</span>
             </span>
-          </NavLink>
+          </button>
 
-          {/* Desktop Navigation Capsule */}
-          <nav className="hidden md:flex items-center gap-1 px-3 py-1.5 rounded-full liquid-glass border border-white/70 dark:border-white/15 shadow-xl">
+          {/* User's Exact Model Navbar: nb-10 Spring Menu */}
+          <nav
+            ref={barRef}
+            onPointerLeave={() => {
+              const activeEl = linkRefs.current[activeSection];
+              if (activeEl) movePillTo(activeEl);
+            }}
+            className="nb-10__bar hidden md:flex items-center"
+            aria-label="Primary Navigation"
+          >
+            {/* Elastic Spring Pill Indicator */}
+            <span ref={pillRef} className="nb-10__pill" aria-hidden="true" />
+
             {navItems.map((item) => {
-              const isActive = location.pathname === item.path;
+              const isActive = activeSection === item.id;
+
               return (
-                <NavLink
-                  key={item.name}
-                  to={item.path}
-                  className="relative px-5 py-2 text-sm font-medium transition-colors duration-200"
+                <button
+                  key={item.id}
+                  ref={(el) => (linkRefs.current[item.id] = el)}
+                  onPointerEnter={(e) => movePillTo(e.currentTarget)}
+                  onClick={() => scrollToSection(item.id)}
+                  aria-current={isActive ? 'page' : undefined}
+                  className={`nb-10__link ${
+                    isActive
+                      ? 'text-blue-600 dark:text-cyan-400 font-bold'
+                      : 'text-slate-800 dark:text-slate-200 opacity-80 hover:opacity-100'
+                  }`}
                 >
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeNavBackground"
-                      className="absolute inset-0 rounded-full bg-white dark:bg-white/15 shadow-md"
-                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                  <span
-                    className={`relative z-10 ${
-                      isActive
-                        ? 'text-liquid-accentBlue dark:text-liquid-accentCyan font-semibold'
-                        : 'text-liquid-textLightSecondary dark:text-liquid-textDarkSecondary hover:text-liquid-textLightPrimary dark:hover:text-liquid-textDarkPrimary'
-                    }`}
-                  >
-                    {item.name}
-                  </span>
-                </NavLink>
+                  {item.name}
+                </button>
               );
             })}
           </nav>
 
-          {/* Action Tools: Command Palette & Theme Switcher */}
+          {/* Action Tools: Command Palette & 3-Way Theme Switcher */}
           <div className="flex items-center gap-2">
-            {/* Command Palette Button */}
+            {/* Command Palette Trigger */}
             <button
               onClick={() => setIsCmdOpen(true)}
-              className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-2xl liquid-glass border border-white/70 dark:border-white/15 text-xs font-mono text-liquid-textLightSecondary dark:text-liquid-textDarkSecondary hover:text-liquid-textLightPrimary dark:hover:text-liquid-textDarkPrimary transition-all duration-200 hover:scale-105 active:scale-95"
+              className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full liquid-glass text-xs font-mono opacity-85 hover:opacity-100 transition-all duration-150 hover:scale-105 active:scale-95 border border-white/80 dark:border-white/15"
               title="Command Palette (Ctrl + K)"
             >
-              <Command className="w-3.5 h-3.5 text-liquid-accentBlue dark:text-liquid-accentCyan" />
+              <Command className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400" />
               <span>⌘K</span>
             </button>
 
-            {/* Theme Toggle Button */}
+            {/* 3-Way Theme Switcher Pill */}
             <button
-              onClick={toggleTheme}
-              className="relative p-2.5 rounded-2xl liquid-glass border border-white/70 dark:border-white/15 text-liquid-textLightPrimary dark:text-liquid-textDarkPrimary transition-transform duration-300 hover:scale-105 active:scale-95 shadow-md"
-              aria-label="Toggle Theme"
-              title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
+              onClick={cycleTheme}
+              className="relative px-4 py-2 rounded-full liquid-glass flex items-center gap-2 text-xs font-medium transition-transform duration-150 hover:scale-105 active:scale-95 shadow-md border border-white/80 dark:border-white/15"
+              aria-label="Cycle Theme"
+              title="Switch Theme (Light, Dark, Liquid Crystal)"
             >
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
                   key={theme}
-                  initial={{ y: -12, opacity: 0, rotate: -45 }}
-                  animate={{ y: 0, opacity: 1, rotate: 0 }}
-                  exit={{ y: 12, opacity: 0, rotate: 45 }}
-                  transition={{ duration: 0.2 }}
+                  initial={{ y: -6, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: 6, opacity: 0 }}
+                  transition={{ duration: 0.1 }}
+                  className="flex items-center gap-1.5"
                 >
-                  {theme === 'dark' ? (
-                    <Sun className="w-4 h-4 text-amber-400" />
-                  ) : (
-                    <Moon className="w-4 h-4 text-liquid-accentBlue" />
-                  )}
+                  {getThemeIcon()}
+                  <span className="font-semibold text-slate-800 dark:text-white">
+                    {getThemeLabel()}
+                  </span>
                 </motion.div>
               </AnimatePresence>
             </button>
@@ -103,7 +197,7 @@ export default function Navbar() {
             {/* Mobile Menu Burger */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2.5 rounded-2xl liquid-glass border border-white/70 dark:border-white/15 text-liquid-textLightPrimary dark:text-liquid-textDarkPrimary"
+              className="md:hidden p-2.5 rounded-full liquid-glass text-slate-900 dark:text-white border border-white/80 dark:border-white/15"
               aria-label="Toggle Mobile Menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -111,7 +205,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Menu Dropdown */}
+        {/* Mobile Dropdown */}
         <AnimatePresence>
           {mobileMenuOpen && (
             <motion.div
@@ -122,20 +216,17 @@ export default function Navbar() {
             >
               <div className="liquid-glass rounded-3xl p-4 shadow-2xl space-y-2 border border-white/80 dark:border-white/15">
                 {navItems.map((item) => (
-                  <NavLink
-                    key={item.name}
-                    to={item.path}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={({ isActive }) =>
-                      `block px-4 py-3 rounded-2xl text-base font-medium transition-colors ${
-                        isActive
-                          ? 'bg-liquid-accentBlue/10 dark:bg-liquid-accentCyan/10 text-liquid-accentBlue dark:text-liquid-accentCyan font-bold'
-                          : 'text-liquid-textLightPrimary dark:text-liquid-textDarkPrimary hover:bg-white/40 dark:hover:bg-white/5'
-                      }`
-                    }
+                  <button
+                    key={item.id}
+                    onClick={() => scrollToSection(item.id)}
+                    className={`w-full text-left px-4 py-3 rounded-full text-base font-medium transition-colors ${
+                      activeSection === item.id
+                        ? 'bg-blue-500/10 text-blue-600 dark:text-cyan-400 font-bold'
+                        : 'opacity-85 hover:opacity-100 hover:bg-white/40 dark:hover:bg-white/5'
+                    }`}
                   >
                     {item.name}
-                  </NavLink>
+                  </button>
                 ))}
               </div>
             </motion.div>

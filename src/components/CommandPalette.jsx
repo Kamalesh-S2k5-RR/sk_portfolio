@@ -1,22 +1,17 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Terminal, Home, User, Briefcase, Mail, Sun, Moon, FileText, X } from 'lucide-react';
+import { Search, Home, User, Briefcase, Mail, Sun, Moon, Droplets, X } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
 export default function CommandPalette({ isOpen, onClose }) {
   const [query, setQuery] = useState('');
-  const navigate = useNavigate();
-  const { theme, toggleTheme } = useTheme();
+  const { theme, cycleTheme } = useTheme();
 
   useEffect(() => {
     const handleKeyDown = (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
         e.preventDefault();
         if (isOpen) onClose();
-        else {
-          // Open palette
-        }
       }
       if (e.key === 'Escape' && isOpen) {
         onClose();
@@ -28,12 +23,19 @@ export default function CommandPalette({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
+  const scrollToSection = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   const commands = [
-    { id: 'home', label: 'Go to Home', icon: Home, action: () => navigate('/') },
-    { id: 'about', label: 'Go to About & Journey', icon: User, action: () => navigate('/about') },
-    { id: 'projects', label: 'View Architected Projects', icon: Briefcase, action: () => navigate('/projects') },
-    { id: 'contact', label: 'Contact Kamalesh S', icon: Mail, action: () => navigate('/contact') },
-    { id: 'theme', label: `Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`, icon: theme === 'dark' ? Sun : Moon, action: () => toggleTheme() },
+    { id: 'home', label: 'Scroll to Top (Home)', icon: Home, action: () => scrollToSection('home') },
+    { id: 'about', label: 'Scroll to About & Journey', icon: User, action: () => scrollToSection('about') },
+    { id: 'projects', label: 'Scroll to Architected Projects', icon: Briefcase, action: () => scrollToSection('projects') },
+    { id: 'contact', label: 'Scroll to Contact Details', icon: Mail, action: () => scrollToSection('contact') },
+    { id: 'theme', label: `Cycle Theme (Current: ${theme})`, icon: theme === 'liquid' ? Droplets : theme === 'dark' ? Moon : Sun, action: () => cycleTheme() },
   ];
 
   const filteredCommands = commands.filter(cmd =>
@@ -59,14 +61,14 @@ export default function CommandPalette({ isOpen, onClose }) {
         >
           {/* Input Header */}
           <div className="flex items-center gap-3 px-3 py-2 border-b border-white/40 dark:border-white/10 mb-2">
-            <Search className="w-5 h-5 text-liquid-textLightSecondary dark:text-liquid-textDarkSecondary" />
+            <Search className="w-5 h-5 opacity-60" />
             <input
               type="text"
               placeholder="Type a command or search sections..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               autoFocus
-              className="w-full bg-transparent outline-none text-liquid-textLightPrimary dark:text-liquid-textDarkPrimary placeholder:text-liquid-textLightSecondary dark:placeholder:text-liquid-textDarkSecondary font-medium text-base"
+              className="w-full bg-transparent outline-none font-medium text-base placeholder:opacity-60"
             />
             <button onClick={onClose} className="p-1 rounded-full hover:bg-black/5 dark:hover:bg-white/10">
               <X className="w-4 h-4" />
@@ -85,15 +87,15 @@ export default function CommandPalette({ isOpen, onClose }) {
                       cmd.action();
                       onClose();
                     }}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-left hover:bg-white/60 dark:hover:bg-white/10 text-liquid-textLightPrimary dark:text-liquid-textDarkPrimary font-medium transition-colors text-sm"
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-left hover:bg-white/60 dark:hover:bg-white/10 font-medium transition-colors text-sm"
                   >
-                    <Icon className="w-4 h-4 text-liquid-accentBlue dark:text-liquid-accentCyan" />
+                    <Icon className="w-4 h-4 text-blue-600 dark:text-cyan-400" />
                     <span>{cmd.label}</span>
                   </button>
                 );
               })
             ) : (
-              <div className="py-6 text-center text-sm text-liquid-textLightSecondary dark:text-liquid-textDarkSecondary">
+              <div className="py-6 text-center text-sm opacity-60">
                 No matching commands found.
               </div>
             )}
@@ -103,4 +105,3 @@ export default function CommandPalette({ isOpen, onClose }) {
     </AnimatePresence>
   );
 }
-
