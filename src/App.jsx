@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react';
 import { ThemeProvider } from './context/ThemeContext';
 import LiquidBackground from './components/LiquidBackground';
 import Navbar from './components/Navbar';
@@ -53,6 +54,9 @@ function App() {
             </div>
           </div>
         </footer>
+        
+        {/* Vercel Web Analytics */}
+        <Analytics />
       </div>
     </ThemeProvider>
   );
