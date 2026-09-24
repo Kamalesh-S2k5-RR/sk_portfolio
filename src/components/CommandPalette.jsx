@@ -2,10 +2,14 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Home, User, Briefcase, Mail, Sun, Moon, Droplets, X } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
+import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 
 export default function CommandPalette({ isOpen, onClose }) {
   const [query, setQuery] = useState('');
   const { theme, cycleTheme } = useTheme();
+
+  // Prevent background page from scrolling while command palette is open
+  useBodyScrollLock(isOpen);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -35,7 +39,7 @@ export default function CommandPalette({ isOpen, onClose }) {
     { id: 'about', label: 'Scroll to About & Journey', icon: User, action: () => scrollToSection('about') },
     { id: 'projects', label: 'Scroll to Architected Projects', icon: Briefcase, action: () => scrollToSection('projects') },
     { id: 'contact', label: 'Scroll to Contact Details', icon: Mail, action: () => scrollToSection('contact') },
-    { id: 'theme', label: `Cycle Theme (Current: ${theme})`, icon: theme === 'liquid' ? Droplets : theme === 'dark' ? Moon : Sun, action: () => cycleTheme() },
+    { id: 'theme', label: `Toggle Theme (Current: ${theme === 'dark' ? 'Dark' : 'Light'})`, icon: theme === 'dark' ? Moon : Sun, action: () => cycleTheme() },
   ];
 
   const filteredCommands = commands.filter(cmd =>
@@ -76,7 +80,7 @@ export default function CommandPalette({ isOpen, onClose }) {
           </div>
 
           {/* Options */}
-          <div className="max-h-64 overflow-y-auto space-y-1 p-1">
+          <div className="max-h-64 overflow-y-auto space-y-1 p-1 overscroll-contain">
             {filteredCommands.length > 0 ? (
               filteredCommands.map((cmd) => {
                 const Icon = cmd.icon;

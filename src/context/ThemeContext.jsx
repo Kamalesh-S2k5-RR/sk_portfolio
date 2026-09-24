@@ -4,36 +4,28 @@ const ThemeContext = createContext();
 
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(() => {
-    const savedTheme = localStorage.getItem('sk_portfolio_theme_v3');
-    if (savedTheme && ['light', 'dark', 'liquid'].includes(savedTheme)) {
-      return savedTheme;
+    const savedTheme = localStorage.getItem('sk_portfolio_theme_v5');
+    if (savedTheme === 'dark') {
+      return 'dark';
     }
-    return 'liquid'; // Default to the ultra-unique Liquid Crystal theme!
+    return 'liquid'; // Liquid Glass theme by default
   });
 
   useEffect(() => {
     const root = document.documentElement;
     root.classList.remove('light', 'dark', 'liquid', 'theme-light', 'theme-dark', 'theme-liquid');
     
-    root.classList.add(theme);
-    root.classList.add(`theme-${theme}`);
-
-    // Standard tailwind dark class support for fallback
     if (theme === 'dark') {
-      root.classList.add('dark');
+      root.classList.add('dark', 'theme-dark');
     } else {
-      root.classList.remove('dark');
+      root.classList.add('liquid', 'theme-liquid');
     }
 
-    localStorage.setItem('sk_portfolio_theme_v3', theme);
+    localStorage.setItem('sk_portfolio_theme_v5', theme);
   }, [theme]);
 
   const cycleTheme = () => {
-    setTheme((prev) => {
-      if (prev === 'light') return 'dark';
-      if (prev === 'dark') return 'liquid';
-      return 'light';
-    });
+    setTheme((prev) => (prev === 'dark' ? 'liquid' : 'dark'));
   };
 
   return (

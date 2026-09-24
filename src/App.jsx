@@ -2,6 +2,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import LiquidBackground from './components/LiquidBackground';
 import Navbar from './components/Navbar';
 import CustomCursor from './components/CustomCursor';
+import ScrollMotionBlur from './components/ScrollMotionBlur';
 
 import Home from './pages/Home';
 import About from './pages/About';
@@ -15,30 +16,33 @@ function App() {
         {/* Minimalist Liquid Glass Custom Cursor */}
         <CustomCursor />
 
-        {/* Animated Background Canvas */}
+        {/* Animated Background Canvas: Completely isolated at z-0 with circular sparkling stars */}
         <LiquidBackground />
 
         {/* Floating Capsule Glass Navbar with ScrollSpy */}
         <Navbar />
 
-        {/* Single-Page Continuous Scroll Sections */}
-        <main className="flex-1 w-full relative z-10 space-y-12 sm:space-y-20 pb-20">
-          <section id="home">
-            <Home />
-          </section>
+        {/* Content-Only Motion Blur Container: Blurs strictly the foreground content during scrolling */}
+        <ScrollMotionBlur>
+          {/* Single-Page Continuous Scroll Sections */}
+          <main className="flex-1 w-full relative z-10 space-y-12 sm:space-y-20 pb-20">
+            <section id="home">
+              <Home />
+            </section>
 
-          <section id="about" className="pt-12 sm:pt-20">
-            <About />
-          </section>
+            <section id="about" className="pt-12 sm:pt-20">
+              <About />
+            </section>
 
-          <section id="projects" className="pt-12 sm:pt-20">
-            <Projects />
-          </section>
+            <section id="projects" className="pt-12 sm:pt-20">
+              <Projects />
+            </section>
 
-          <section id="contact" className="pt-12 sm:pt-20">
-            <Contact />
-          </section>
-        </main>
+            <section id="contact" className="pt-12 sm:pt-20">
+              <Contact />
+            </section>
+          </main>
+        </ScrollMotionBlur>
 
         {/* Footer */}
         <footer className="relative z-10 w-full py-8 px-4 border-t border-white/40 dark:border-white/10 text-center text-xs font-mono opacity-70">

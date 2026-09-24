@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sun, Moon, Droplets, Command, Menu, X } from 'lucide-react';
+import { Sun, Moon, Command, Menu, X } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
+import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 import CommandPalette from './CommandPalette';
 
 export default function Navbar() {
@@ -9,6 +10,9 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState('home');
   const [isCmdOpen, setIsCmdOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Lock body scroll when mobile menu dropdown is open
+  useBodyScrollLock(mobileMenuOpen);
 
   const navItems = [
     { name: 'Home', id: 'home' },
@@ -97,19 +101,18 @@ export default function Navbar() {
   };
 
   const getThemeIcon = () => {
-    if (theme === 'light') return <Sun className="w-4 h-4 text-amber-500" />;
     if (theme === 'dark') return <Moon className="w-4 h-4 text-cyan-400" />;
-    return <Droplets className="w-4 h-4 text-blue-600 dark:text-cyan-400" />;
+    return <Sun className="w-4 h-4 text-amber-500" />;
   };
 
   const getThemeLabel = () => {
-    if (theme === 'light') return 'Light';
     if (theme === 'dark') return 'Dark';
-    return 'Liquid Crystal';
+    return 'Light';
   };
 
   return (
     <>
+      {/* Separated Floating Dynamic Island Navbar */}
       <header className="sticky top-0 z-40 w-full px-4 sm:px-8 py-4 pointer-events-none">
         <div className="max-w-6xl mx-auto flex items-center justify-between pointer-events-auto">
           {/* Brand Logo */}
@@ -158,7 +161,7 @@ export default function Navbar() {
             })}
           </nav>
 
-          {/* Action Tools: Command Palette & 3-Way Theme Switcher */}
+          {/* Action Tools: Command Palette & Theme Switcher */}
           <div className="flex items-center gap-2">
             {/* Command Palette Trigger */}
             <button
@@ -167,15 +170,15 @@ export default function Navbar() {
               title="Command Palette (Ctrl + K)"
             >
               <Command className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400" />
-              <span>⌘K</span>
+              <span>K</span>
             </button>
 
-            {/* 3-Way Theme Switcher Pill */}
+            {/* 2-Theme Switcher Pill: Light (Liquid Glass) vs Dark */}
             <button
               onClick={cycleTheme}
               className="relative px-4 py-2 rounded-full liquid-glass flex items-center gap-2 text-xs font-medium transition-transform duration-150 hover:scale-105 active:scale-95 shadow-md border border-white/80 dark:border-white/15"
-              aria-label="Cycle Theme"
-              title="Switch Theme (Light, Dark, Liquid Crystal)"
+              aria-label="Toggle Theme"
+              title="Switch Theme (Light, Dark)"
             >
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div

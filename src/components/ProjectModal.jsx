@@ -1,13 +1,17 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ExternalLink, BookOpen, Cpu, ShieldCheck, Zap, Layers } from 'lucide-react';
 import { GithubIcon } from './Icons';
+import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 
 export default function ProjectModal({ project, onClose }) {
+  // Prevent background page from scrolling while project modal is open
+  useBodyScrollLock(Boolean(project));
+
   if (!project) return null;
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto overscroll-contain">
         {/* Backdrop blur overlay */}
         <motion.div
           initial={{ opacity: 0 }}

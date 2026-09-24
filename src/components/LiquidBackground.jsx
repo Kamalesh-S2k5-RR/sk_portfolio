@@ -36,8 +36,8 @@ export default function LiquidBackground() {
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseleave', handleMouseLeave);
 
-    // Create Star Particles
-    const particleCount = theme === 'dark' ? 160 : theme === 'liquid' ? 110 : 50;
+    // Create Star Particles (Dark mode: 160, Liquid Glass mode: 110)
+    const particleCount = theme === 'dark' ? 160 : 110;
     const particles = Array.from({ length: particleCount }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
@@ -103,27 +103,32 @@ export default function LiquidBackground() {
           p.speedAlpha = -p.speedAlpha;
         }
 
-        // Render Particle Star Node
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        // Color & Shadow calculations
+        let particleColor = `rgba(100, 116, 139, ${p.alpha * 0.45})`;
+        let shadowBlur = 0;
+        let shadowColor = 'transparent';
 
         if (theme === 'dark') {
-          ctx.fillStyle = p.hue === 210
+          particleColor = p.hue === 210
             ? `rgba(0, 242, 254, ${p.alpha})`
             : `rgba(255, 255, 255, ${p.alpha})`;
-          ctx.shadowBlur = p.radius > 1.2 ? 10 : 0;
-          ctx.shadowColor = 'rgba(0, 242, 254, 0.8)';
+          shadowBlur = p.radius > 1.2 ? 10 : 0;
+          shadowColor = 'rgba(0, 242, 254, 0.8)';
         } else if (theme === 'liquid') {
-          ctx.fillStyle = p.hue === 210
+          particleColor = p.hue === 210
             ? `rgba(0, 113, 227, ${p.alpha * 0.7})`
             : `rgba(112, 0, 255, ${p.alpha * 0.6})`;
-          ctx.shadowBlur = 6;
-          ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
-        } else {
-          ctx.fillStyle = `rgba(100, 116, 139, ${p.alpha * 0.45})`;
-          ctx.shadowBlur = 0;
+          shadowBlur = 6;
+          shadowColor = 'rgba(255, 255, 255, 0.8)';
         }
 
+        ctx.shadowBlur = shadowBlur;
+        ctx.shadowColor = shadowColor;
+
+        // Render Particle: Clean, sparkling circular star node
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = particleColor;
         ctx.fill();
       });
 
@@ -199,14 +204,6 @@ export default function LiquidBackground() {
             transition={{ duration: 24, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
             className="absolute top-1/3 -right-28 w-[650px] h-[650px] bg-gradient-to-bl from-purple-700/25 via-indigo-600/20 to-pink-500/15 rounded-full blur-[150px]"
           />
-        </div>
-      )}
-
-      {/* Theme 1: Light Clean Soft Backdrop */}
-      {theme === 'light' && (
-        <div className="absolute inset-0 opacity-60 transition-opacity duration-700">
-          <div className="absolute -top-20 -left-20 w-[500px] h-[500px] bg-blue-100/60 rounded-full blur-[100px]" />
-          <div className="absolute top-1/3 -right-20 w-[550px] h-[550px] bg-purple-100/50 rounded-full blur-[120px]" />
         </div>
       )}
     </div>
